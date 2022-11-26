@@ -30,13 +30,16 @@ bot.on('message', async(msg) => {
     }
 
     if(msg?.web_app_data?.data){
+        const data = {chatId:
+            msg?.web_app_data?.data}
+
         try{
             fetch('http://127.0.0.1:8000/api/todos/post', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: msg?.web_app_data?.data
+                body: JSON.stringify(data)
             })
               .then(() => {
                   const data = JSON.parse(msg?.web_app_data?.data);
