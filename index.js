@@ -30,29 +30,35 @@ bot.on('message', async(msg) => {
     }
 
     if(msg?.web_app_data?.data){
-        const data = {chatId:
-            msg?.web_app_data?.data}
-
-        try{
-            fetch('http://127.0.0.1:8000/api/todos/post', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            })
-              .then(() => {
-                  const data = JSON.parse(msg?.web_app_data?.data);
-                  bot.sendMessage(chatId,`Событие ${data?.todos.name} добавленно в Ваш календарь`)
-              })
-              .catch((err) => {
-                  console.log(err)
-              })
-
-            console.log(msg?.web_app_data?.data)
-
-        } catch (e){
-            console.log(e);
+        const raw = JSON.parse(msg?.web_app_data?.data);
+        // const data = Object.assign(raw, {"userID": chatId});
+        const data = {
+            "todos": {
+                ...raw,
+                userID: chatId
+            }
         }
+        // console.log('1:', data)
+
+
+        fetch('http://127.0.0.1:8000/api/todos/post', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+          .then(() => {
+              // console.log(data)
+              const data = JSON.parse(msg?.web_app_data?.data);
+              bot.sendMessage(chatId,`Событие ${data?.name} добавленно в Ваш календарь`)
+          })
+          .catch((err) => {
+              console.log(err)
+          })
+
+        console.log(data)
+
+
     }
 });
