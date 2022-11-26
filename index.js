@@ -24,10 +24,23 @@ bot.on('message', async(msg) => {
 
     if(msg?.web_app_data?.data){
         try{
-            fetch('')
+            fetch('http://127.0.0.1:8000/api/todos/post', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: msg?.web_app_data?.data
+            })
+              .then(() => {
+                  const data = JSON.parse(msg?.web_app_data?.data);
+                  bot.sendMessage(chatId,`Событие ${data?.todos.name} добавленно в Ваш календарь`)
+              })
+              .catch((err) => {
+                  console.log(err)
+              })
 
-            const data = JSON.parse(msg?.web_app_data?.data);
-            await bot.sendMessage(chatId,`Событие ${data?.name} добавленно в Ваш календарь`)
+            console.log(msg?.web_app_data?.data)
+
         } catch (e){
             console.log(e);
         }
