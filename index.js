@@ -16,7 +16,14 @@ bot.on('message', async(msg) => {
             reply_markup:{
                 keyboard:[
                     [{text: 'добавить событие', web_app:{url:webAppUrl + '/form'}}],
-                    [{text: 'посмотреть календарь', web_app:{url:webAppUrl}}]
+                ]
+            }
+        })
+    } else if (text == '/event_list'){
+        await bot.sendMessage(chatId, 'Список твоих ближайших событий доступен по ссылке ниже:',{
+            reply_markup:{
+                inline_keyboard:[
+                    [{text: 'ближайшие события', web_app:{url:webAppUrl}}]
                 ]
             }
         })
