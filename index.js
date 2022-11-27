@@ -19,19 +19,9 @@ bot.on('message', async(msg) => {
                 ]
             }
         })
-    } else if (text == '/event_list'){
-        await bot.sendMessage(chatId, 'Список твоих ближайших событий доступен по ссылке ниже:',{
-            reply_markup:{
-                inline_keyboard:[
-                    [{text: 'ближайшие события', web_app:{url:webAppUrl}}]
-                ]
-            }
-        })
     }
 
     if(msg?.web_app_data?.data){
-        const data = {chatId:
-            msg?.web_app_data?.data}
 
         try{
             fetch('http://127.0.0.1:8000/api/todos/post', {
@@ -39,7 +29,7 @@ bot.on('message', async(msg) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(data)
+                body: msg?.web_app_data?.data
             })
               .then(() => {
                   const data = JSON.parse(msg?.web_app_data?.data);
@@ -49,7 +39,7 @@ bot.on('message', async(msg) => {
                   console.log(err)
               })
 
-            console.log(msg?.web_app_data?.data)
+            // console.log(msg?.web_app_data?.data)
 
         } catch (e){
             console.log(e);
